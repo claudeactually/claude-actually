@@ -84,6 +84,65 @@ src="https://www.facebook.com/tr?id=2633650787050149&ev=PageView&noscript=1"
   ]
 }
 </script>
+<style>
+  /* Story Keeper - the start-to-finish first project */
+  .keeper{background:var(--panel);border:1px solid var(--line);border-radius:20px;
+    padding:30px 30px 26px;box-shadow:0 18px 50px rgba(28,23,20,.06);margin-top:18px}
+  .keeper .intro{color:#3a302b;font-size:15.5px;max-width:64ch;margin-bottom:8px}
+  .keeper .intro b{color:var(--ink)}
+  .step{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:22px 0;border-top:1px solid var(--line)}
+  .step:first-of-type{border-top:none;padding-top:14px}
+  .step .num{width:44px;height:44px;border-radius:12px;background:var(--coral);color:#fff;
+    font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px rgba(240,101,79,.30)}
+  .step .st{font-weight:800;font-size:17px;letter-spacing:-.01em;margin-bottom:5px}
+  .step .sd{color:#3a302b;font-size:14.5px;max-width:60ch}
+  .step .sd b{color:var(--ink)}
+  .prompt{margin-top:12px;background:rgba(58,110,165,.06);border:1px solid rgba(58,110,165,.20);
+    border-radius:12px;padding:14px 16px;position:relative}
+  .prompt .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--blue);font-weight:700;margin-bottom:7px}
+  .prompt .txt{font-size:14.5px;color:var(--ink);line-height:1.55}
+  .prompt .copy{margin-top:11px;display:inline-flex;align-items:center;gap:6px;background:#fff;
+    border:1.5px solid rgba(58,110,165,.30);color:var(--blue);font-weight:700;font-size:13px;
+    font-family:var(--sans);border-radius:9px;padding:8px 14px;cursor:pointer;
+    transition:border-color .15s ease,background .15s ease}
+  .prompt .copy:hover{border-color:var(--blue);background:rgba(58,110,165,.06)}
+  .prompt .copy.done{color:#27b878;border-color:rgba(39,184,120,.5)}
+  .keeper .payoff{margin-top:8px;padding:18px 20px;background:rgba(240,101,79,.06);
+    border:1px solid var(--line);border-radius:14px}
+  .keeper .payoff .t{font-weight:800;font-size:15.5px;margin-bottom:5px;color:var(--ink)}
+  .keeper .payoff p{color:#3a302b;font-size:14px;max-width:62ch}
+  @media (max-width:640px){
+    .keeper{padding:24px 22px 20px}
+    .step{grid-template-columns:38px 1fr;gap:13px}
+    .step .num{width:38px;height:38px;font-size:17px}
+  }
+  /* Bonus - give your story a picture */
+  .bonus{margin-top:16px;background:var(--panel);border:1px dashed rgba(240,101,79,.45);
+    border-radius:20px;padding:26px 28px 24px}
+  .bonus .btag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral-deep);font-weight:700;border:1px solid var(--line);
+    background:rgba(240,101,79,.06);border-radius:999px;padding:5px 12px;margin-bottom:12px}
+  .bonus h3{font-size:20px;letter-spacing:-.01em;font-weight:800;margin-bottom:6px}
+  .bonus .lead{color:#3a302b;font-size:15px;max-width:64ch;margin-bottom:10px}
+  .bonus .example{width:100%;border-radius:14px;border:1px solid var(--line);display:block;
+    margin:14px 0 6px;box-shadow:0 12px 34px rgba(28,23,20,.10)}
+  .bonus .cap{font-family:var(--mono);font-size:12px;color:var(--dim);text-align:center;margin-bottom:20px}
+  .paths{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  @media (max-width:640px){ .paths{grid-template-columns:1fr} }
+  .path{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:20px 20px 18px}
+  .path .ph{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--blue);font-weight:700;margin-bottom:4px}
+  .path .pt{font-weight:800;font-size:16.5px;letter-spacing:-.01em;margin-bottom:7px}
+  .path .pt .badge{font-family:var(--sans);font-size:11px;font-weight:700;color:#fff;background:var(--coral);
+    border-radius:999px;padding:3px 9px;margin-left:7px;vertical-align:middle;letter-spacing:0;text-transform:none}
+  .path .pd{color:#3a302b;font-size:14px;max-width:52ch}
+  .path .pd b{color:var(--ink)}
+  .path ol{margin:8px 0 0 0;padding-left:20px;color:#3a302b;font-size:14px}
+  .path ol li{margin-bottom:6px}
+  .path .prompt{margin-top:10px}
+</style>
 </head>
 <body>
 
@@ -189,6 +248,106 @@ src="https://www.facebook.com/tr?id=2633650787050149&ev=PageView&noscript=1"
   </section>
 
   <section class="sec">
+    <h2>Your first project: turn a memory into a keepsake</h2>
+    <p class="sub">Ready for a real one? Here is a little project to do just for yourself, start to finish, in about twenty minutes. You will take one memory from your life and turn it into a beautiful written keepsake to keep, print, or email to the family. This is the whole thing, and it is lovely.</p>
+    <div class="keeper">
+      <p class="intro">You will need one thing: <b>a story worth keeping</b>. How you met your spouse. A summer from your childhood. The day a child was born. Your first job, your old neighborhood, a recipe and the person it came from. Pick one, and open your helper from the section above.</p>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <div class="st">Tell it your story, messy is fine</div>
+          <div class="sd">Do not worry about writing it well. Just talk. Type it the way you would tell it out loud, jumping around and all. Paste this in first, then tell your story underneath it.</div>
+          <div class="prompt">
+            <div class="lbl">Copy this to start</div>
+            <div class="txt">I want to turn a memory from my life into a short, warm keepsake to share with my family. I will tell you the story in my own words, a little messy. Please listen first, then ask me two or three gentle questions to fill in the parts that would make it richer. Here is my story:</div>
+            <button class="copy" type="button">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <div class="st">Answer its questions</div>
+          <div class="sd">It will ask you a few things, what year it was, what the room smelled like, who else was there. Answer however you like. This is the part that turns a fact into a memory. Take your time. There are no wrong answers.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <div class="st">Ask it to write the keepsake</div>
+          <div class="sd">Now let it do the heavy lifting. Then shape it until it feels like <b>you</b>. Say "make it warmer," or "shorter," or "that is not quite how I would say it, try again." You are the boss, and it never gets tired of trying.</div>
+          <div class="prompt">
+            <div class="lbl">Copy this next</div>
+            <div class="txt">Now please write this as a short, warm keepsake I could read aloud to my family, in a natural voice that sounds like me, not fancy. Keep it under one page. When you are done, I may ask you to adjust the tone.</div>
+            <button class="copy" type="button">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">4</div>
+        <div>
+          <div class="st">Keep it, and share it</div>
+          <div class="sd">When it feels right, ask it to give the piece a title. Then it is yours. Copy the words into an email to your kids or grandkids, or print it and tuck it somewhere they will find it one day. You just made something that will outlast you, in twenty minutes, on your first try.</div>
+          <div class="prompt">
+            <div class="lbl">A nice finishing touch</div>
+            <div class="txt">This is wonderful, thank you. Please give it a short, heartfelt title, and then write one gentle sentence I could put at the top when I send it to my grandchildren.</div>
+            <button class="copy" type="button">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="payoff">
+        <div class="t">Look what you just did</div>
+        <p>You asked it something real. You shaped its answer until it sounded like you. And you knew the story better than it did, so you kept it honest. That is the whole skill, and you already have it. It is the exact same thing you will do next, with the grandkids, to build something real together.</p>
+      </div>
+    </div>
+
+    <div class="bonus">
+      <span class="btag">Bonus, if you are having fun</span>
+      <h3>Give your story a picture</h3>
+      <p class="lead">Here is a delightful trick: the AI can also paint your memory. Ask it for a warm, Pixar-style picture to go with your keepsake, and it makes one in a few seconds. Here is the kind of thing it gives back.</p>
+      <img class="example" src="assets/story-picture-example.jpg" alt="A warm Pixar-style illustration of a young couple sharing a first dance, an example of a memory turned into a picture" loading="lazy">
+      <p class="cap">An example, made in seconds from a story like yours.</p>
+      <p class="lead">Which one did you use for your story? Follow that path.</p>
+      <div class="paths">
+
+        <div class="path">
+          <div class="ph">If you used Claude</div>
+          <div class="pt">One quick hop <span class="badge">Best practice</span></div>
+          <div class="pd">Claude writes beautiful stories, but it does not make pictures. No problem. It will happily write the picture instructions for you, and you hand them to a friend that does. This is the good stuff, because you get to see how alike these tools really are.</div>
+          <ol>
+            <li>In the <b>same chat</b> where you made your story, paste the box below. Claude will write you a picture prompt.</li>
+            <li>Get <b>ChatGPT</b> or <b>Gemini</b> (free). On a phone or tablet, open the App Store or Play Store, search the name, and tap Get. On a computer, go to <a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a> or <a href="https://gemini.google.com" target="_blank" rel="noopener">gemini.google.com</a>.</li>
+            <li>Paste what Claude gave you into that app, and press send. Your picture appears.</li>
+          </ol>
+          <div class="prompt">
+            <div class="lbl">Paste this to Claude</div>
+            <div class="txt">This story is lovely. Please write me a short image prompt I can copy into ChatGPT or Gemini to create a warm, Pixar-style picture that captures this memory. Just give me the prompt to copy.</div>
+            <button class="copy" type="button">Copy</button>
+          </div>
+        </div>
+
+        <div class="path">
+          <div class="ph">If you used ChatGPT or Gemini</div>
+          <div class="pt">You are already set</div>
+          <div class="pd">These two make pictures themselves. Just ask, right in the same chat where your story is. Paste the box below and watch.</div>
+          <div class="prompt">
+            <div class="lbl">Paste this in the same chat</div>
+            <div class="txt">This is wonderful. Please make a warm, Pixar-style picture that captures this memory, to go along with the story.</div>
+            <button class="copy" type="button">Copy</button>
+          </div>
+          <div class="pd" style="margin-top:12px"><b>Want the extra practice?</b> Try the other one too. If you used ChatGPT, give Gemini a go, or the other way around. Getting comfy hopping between them is a real skill, and it is easier than it looks.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
     <h2>Stuck? You are not alone.</h2>
     <p class="sub">Here is the nice part. We are right there on Facebook, the same place you already are. If something does not make sense, just ask. No question is too small, and a real person, with a friendly AI helping, will answer.</p>
   </section>
@@ -241,5 +400,30 @@ src="https://www.facebook.com/tr?id=2633650787050149&ev=PageView&noscript=1"
 </footer>
 
 <script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+<script>
+  // Copy-to-clipboard for the Story Keeper prompt boxes. Kept simple and forgiving.
+  document.querySelectorAll('.prompt .copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = btn.parentElement.querySelector('.txt').innerText.trim();
+      var done = function(){
+        btn.textContent = 'Copied';
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = 'Copy'; btn.classList.remove('done'); }, 2200);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+      } else {
+        fallback(text, done);
+      }
+    });
+  });
+  function fallback(text, done){
+    var t = document.createElement('textarea');
+    t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.focus(); t.select();
+    try { document.execCommand('copy'); done(); } catch(e){}
+    document.body.removeChild(t);
+  }
+</script>
 </body>
 </html>
