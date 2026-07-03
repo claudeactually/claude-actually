@@ -182,7 +182,7 @@ CONFIG_PAGE = r"""<!DOCTYPE html>
     </div>
     <div class="body">
       <div class="stamp">MISSION CONFIG</div>
-      <p class="sub">Stamp <b>your family's structure</b> into the field tests: codename, rewards, and (optionally) your own passwords. Everything happens on this computer &mdash; nothing is uploaded, no account, no internet needed. Click <b>GENERATE</b> and you'll get personalized field-test files for your operative, a fresh <b>CODES.txt</b> for you, and a <b>family file</b> you can load here later to make changes.</p>
+      <p class="sub">Stamp <b>your family's structure</b> into the field tests: codename, rewards, and (optionally) your own passwords. Everything happens on this computer. Nothing is uploaded, no account, no internet needed. Click <b>GENERATE</b> and you'll get personalized field-test files for your operative, a fresh <b>CODES.txt</b> for you, and a <b>family file</b> you can load here later to make changes.</p>
 
       <fieldset>
         <legend>THE OPERATIVE</legend>
@@ -240,7 +240,7 @@ CONFIG_PAGE = r"""<!DOCTYPE html>
         <summary>&#9656; ADVANCED: SET YOUR OWN PASSWORDS</summary>
         <fieldset>
           <legend>PASSWORDS</legend>
-          <p class="sub" style="margin-bottom:4px">The defaults work fine. Set your own and your family's codes exist nowhere else. Letters and numbers only, no spaces; the check ignores capitalization. The cipher ladder escalates on purpose &mdash; every phase is a lock they've never seen.</p>
+          <p class="sub" style="margin-bottom:4px">The defaults work fine. Set your own and your family's codes exist nowhere else. Letters and numbers only, no spaces; the check ignores capitalization. The cipher ladder escalates on purpose. Every phase is a lock they've never seen.</p>
           <div class="row2">
             <div>
               <label for="pw1">PHASE 1 PASSWORD (HEX)</label>
@@ -282,7 +282,7 @@ CONFIG_PAGE = r"""<!DOCTYPE html>
       </div>
       <div id="msg"></div>
 
-      <p class="note"><b>What you'll download:</b> one locked field-test file per phase (give these to your operative), CODES.txt (yours &mdash; access codes, passwords, rewards), and family-file.json (your save file; load it here anytime). If downloads are blocked, allow multiple downloads when the browser asks.</p>
+      <p class="note"><b>What you'll download:</b> one locked field-test file per phase (give these to your operative), CODES.txt (yours: access codes, passwords, rewards), and family-file.json (your save file; load it here anytime). If downloads are blocked, allow multiple downloads when the browser asks.</p>
     </div>
   </main>
 

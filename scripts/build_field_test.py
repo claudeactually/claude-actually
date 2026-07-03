@@ -77,7 +77,7 @@ ENCODERS = {
     "rot13": {
         "encode": lambda s: codecs.encode(s, "rot13"),
         "label": "ROT13",
-        "hint": "Paste the code into your AI and ask what it says. It's an old cipher &mdash; Julius Caesar could have cracked this one.",
+        "hint": "Paste the code into your AI and ask what it says. It's an old cipher, so old Julius Caesar could have cracked it.",
     },
     "binary": {
         "encode": lambda s: " ".join(format(b, "08b") for b in s.encode("utf-8")),
@@ -104,7 +104,7 @@ ENCODERS = {
 SITE_PARENTS_NOTE = (
     '<p class="g-parents"><b>Parent?</b> This is a playable demo. The full program guide is '
     '<a href="../founder-kit.html">here</a>. Stuck on the code? Crack it the same way your kid '
-    'will &mdash; paste it into Claude or ChatGPT and ask what it is.</p>'
+    'will: paste it into Claude or ChatGPT and ask what it is.</p>'
 )
 SITE_BACK_LINK = '<p class="g-back"><a href="index.html">&#8592; ALL FIELD TESTS</a></p>'
 
