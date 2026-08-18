@@ -3,495 +3,405 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FOUNDER QUEST</title>
+<title>Founder Quest &middot; Build, Actually</title>
+<meta name="description" content="The whole program as a build-log you play in your browser. Six phases from blank page to launched business, with paste-ready AI prompts and a catch-the-AI tracker. Free, saves as you go, no account.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta property="og:title" content="Founder Quest, free from Build, Actually">
+<meta property="og:description" content="Blank page to launched business, six phases, played in your browser. Paste-ready prompts, field tests, and a catch-the-AI tracker. Free, no account.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://buildactually.org/founder-quest.html">
+<meta property="og:image" content="https://buildactually.org/assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Build, Actually, build something actual">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Founder Quest &middot; Build, Actually">
+<meta name="twitter:description" content="Blank page to launched business, six phases, in your browser. Free, saves as you go, no account.">
+<meta name="twitter:image" content="https://buildactually.org/assets/og-card.png">
+<link rel="stylesheet" href="assets/site.css">
 <style>
-  :root{
-    --bg:#05070d; --panel:#0b1020; --ink:#e8f0ff; --dim:#5b6b8c;
-    --green:#27f5a0; --amber:#ffb347; --red:#ff6b6b; --line:rgba(39,245,160,.18);
-    --mono:"SF Mono","Menlo","Monaco","Consolas",monospace;
-    --display:"Avenir Next","Helvetica Neue",sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    background:
-      radial-gradient(1200px 600px at 70% -10%, rgba(39,245,160,.10), transparent 60%),
-      radial-gradient(900px 500px at 0% 120%, rgba(255,179,71,.08), transparent 55%),
-      var(--bg);
-    color:var(--ink);font-family:var(--mono);min-height:100vh;
-    display:flex;align-items:flex-start;justify-content:center;padding:24px;
-  }
-  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
-    background:repeating-linear-gradient(to bottom, rgba(255,255,255,.025) 0 1px, transparent 1px 3px);
-    mix-blend-mode:overlay;opacity:.5}
-  .wrap{width:min(820px,100%)}
-  .card{background:linear-gradient(180deg, rgba(11,16,32,.92), rgba(5,7,13,.92));
-    border:1px solid var(--line);border-radius:14px;overflow:hidden;
-    box-shadow:0 0 0 1px rgba(255,255,255,.02), 0 40px 120px rgba(0,0,0,.6)}
-  .bar{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);
-    font-size:12px;letter-spacing:.18em;color:var(--dim)}
-  .dot{width:11px;height:11px;border-radius:50%;background:#1e2740;border:1px solid rgba(255,255,255,.06)}
-  .dot.g{background:var(--green);box-shadow:0 0 12px var(--green)}
-  .bar .id{margin-left:auto;color:var(--green)}
-  .body{padding:30px 32px 34px}
-  .stamp{font-family:var(--display);font-weight:800;font-size:clamp(28px,6vw,50px);line-height:1.02;
-    letter-spacing:-.02em;color:var(--green);text-shadow:0 0 30px rgba(39,245,160,.35);margin-bottom:6px}
-  .sub{color:var(--dim);font-size:13px;line-height:1.6;margin-bottom:24px}
-  .sub b{color:var(--ink)}
+  /* ---- Founder Quest build-log, scoped, on the site palette ---- */
+  .fq-wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+  .fq-intro{padding:52px 0 22px}
+  .fq-intro .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--coral-deep);font-weight:600}
+  .fq-intro h1{font-family:var(--serif);font-size:clamp(32px,6vw,52px);line-height:1.03;letter-spacing:-.02em;margin:12px 0 16px;font-weight:700;max-width:16ch}
+  .fq-intro p{font-size:18px;line-height:1.6;color:var(--dim);max-width:66ch;margin:0}
+  .fq-intro p b{color:var(--ink)}
 
-  .field{margin-top:16px}
-  .field label{display:block;font-size:11px;letter-spacing:.16em;color:var(--amber);
-    text-transform:uppercase;margin-bottom:7px}
-  .field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);
-    border-radius:9px;padding:13px 14px;color:var(--ink);font-family:var(--mono);font-size:15px}
-  .field input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(39,245,160,.12)}
-  .field input::-webkit-calendar-picker-indicator{filter:invert(.7) sepia(1) hue-rotate(70deg)}
-  .field .hint{color:var(--dim);font-size:11.5px;margin-top:5px}
-  #gateMsg{display:none;margin-top:18px;padding:13px 15px;border-radius:9px;font-size:13px;line-height:1.55;
-    font-family:var(--display)}
-  #gateMsg.err{display:block;border:1px solid var(--red);background:rgba(255,107,107,.08);color:#ffd2d2}
-  #gateMsg.warn{display:block;border:1px solid var(--amber);background:rgba(255,179,71,.08);color:#ffe2bd}
-  .btn{margin-top:22px;width:100%;background:var(--green);color:#04130c;border:0;border-radius:10px;
-    padding:15px;font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.04em;
-    cursor:pointer;transition:transform .08s, box-shadow .2s}
-  .btn:hover{box-shadow:0 0 30px rgba(39,245,160,.4)}
-  .btn:active{transform:translateY(1px)}
+  .fq-top{display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:stretch;margin:8px 0 6px}
+  @media(max-width:720px){.fq-top{grid-template-columns:1fr}}
+  .fq-prog{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px 26px}
+  .fq-prog .head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:15px}
+  .fq-prog .head .n{font-family:var(--serif);font-weight:700;font-size:22px}
+  .fq-prog .head .pct{font-size:15px;font-weight:600;color:var(--dim)}
+  .fq-bar{height:12px;background:#f2e6dd;border-radius:100px;overflow:hidden;margin-bottom:18px}
+  .fq-fill{height:100%;background:var(--coral);border-radius:100px;transition:width .35s ease;width:0}
+  .fq-dots{display:flex;gap:6px}
+  .fq-dots .d{flex:1;text-align:center}
+  .fq-dots .d .seg{height:6px;border-radius:3px;background:#f2e6dd}
+  .fq-dots .d .lb{font-size:11.5px;font-weight:600;color:var(--dim);margin-top:8px;font-family:var(--mono)}
 
-  #boot{font-size:13px;line-height:2;color:var(--dim);min-height:150px;white-space:pre-wrap}
-  #boot .ok{color:var(--green)}
+  .fq-catch{background:#241f1c;color:#f6efe6;border-radius:16px;padding:24px 26px;display:flex;flex-direction:column;gap:9px}
+  .fq-catch .t{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#e0a58e}
+  .fq-catch .num{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1}
+  .fq-catch .sub{font-size:14px;line-height:1.5;color:#c3b8ab}
+  .fq-catch button{margin-top:auto;font-family:var(--sans);font-weight:700;font-size:15px;background:var(--coral);color:#fff;border:none;padding:12px 18px;border-radius:9px;cursor:pointer;transition:background .15s ease}
+  .fq-catch button:hover{background:var(--coral-deep)}
 
-  .hud{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-bottom:6px}
-  .hud .who{font-family:var(--display);font-weight:800;font-size:clamp(24px,5vw,38px);
-    color:var(--green);text-shadow:0 0 26px rgba(39,245,160,.3)}
-  .flavor{color:var(--amber);font-size:12.5px;margin:6px 0 0;font-family:var(--display)}
-  .stats{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0 4px;font-size:12px;letter-spacing:.06em}
-  .stat{color:var(--dim)} .stat b{color:var(--ink)} .stat .amber{color:var(--amber)}
-  .pbar{height:9px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:99px;
-    overflow:hidden;margin:14px 0 26px}
-  .pfill{height:100%;background:linear-gradient(90deg,var(--green),var(--amber));width:0;transition:width .5s ease}
+  .fq-phases{display:grid;gap:12px;margin:22px 0 8px}
+  .fq-ph{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .fq-ph.open{border-color:#e6cfbb}
+  .fq-ph > button.bar{width:100%;text-align:left;display:flex;align-items:center;gap:16px;padding:19px 22px;background:none;border:none;cursor:pointer;font-family:var(--sans)}
+  .fq-ph .dot{width:38px;height:38px;flex:none;border-radius:50%;background:#f2e6dd;color:var(--dim);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:16px}
+  .fq-ph.done .dot{background:var(--coral);color:#fff}
+  .fq-ph .meta{flex:1;min-width:0}
+  .fq-ph .meta .nm{display:block;font-family:var(--serif);font-weight:700;font-size:20px;color:var(--ink);letter-spacing:-.01em}
+  .fq-ph .meta .bl{display:block;font-size:14.5px;color:var(--dim);margin-top:2px}
+  .fq-ph .cnt{font-size:13px;font-weight:700;color:var(--dim);white-space:nowrap;font-family:var(--mono)}
+  .fq-ph.done .cnt{color:var(--coral-deep)}
+  .fq-ph .chev{font-size:12px;color:var(--dim);width:14px;text-align:center}
+  .fq-body{display:none;padding:2px 22px 24px;border-top:1px solid #f2e6dd}
+  .fq-ph.open .fq-body{display:block}
+  .fq-body h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700;margin:20px 0 8px}
 
-  .lvl{border:1px solid var(--line);border-radius:12px;margin-top:14px;overflow:hidden;background:rgba(39,245,160,.025)}
-  .lvl.locked{opacity:.5}
-  .lvl.cleared{border-color:rgba(39,245,160,.45);background:rgba(39,245,160,.06)}
-  .lvl > .head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
-  .lvl.locked > .head{cursor:not-allowed}
-  .badge{flex:0 0 38px;height:38px;border-radius:9px;border:1px solid var(--green);color:var(--green);
-    display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:17px}
-  .lvl.cleared .badge{background:var(--green);color:#04130c}
-  .htxt{flex:1;min-width:0}
-  .htxt .t{font-family:var(--display);font-weight:700;font-size:16px;color:var(--ink)}
-  .htxt .g{color:var(--dim);font-size:12.5px;margin-top:2px}
-  .chev{color:var(--dim);font-size:13px}
-  .lock-note{color:var(--amber);font-size:11px;letter-spacing:.06em}
-  .inner{display:none;padding:4px 18px 20px;border-top:1px dashed rgba(91,107,140,.25)}
-  .lvl.open .inner{display:block}
+  .fq-items{display:grid;gap:1px;margin:14px 0 4px}
+  .fq-items button{display:flex;align-items:flex-start;gap:12px;text-align:left;background:none;border:none;padding:8px 0;cursor:pointer;font-family:var(--sans);font-size:15.5px;color:var(--ink);line-height:1.45}
+  .fq-items .box{width:20px;height:20px;flex:none;margin-top:1px;border-radius:6px;border:2px solid #d8ccbc;background:#fff;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .fq-items button.on .box{background:var(--coral);border-color:var(--coral)}
+  .fq-items button.on .lbl{color:var(--dim);text-decoration:line-through}
 
-  .sec{font-size:11px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;margin:18px 0 8px}
-  .ck{display:flex;gap:11px;align-items:flex-start;padding:7px 0;cursor:pointer}
-  .box{flex:0 0 19px;height:19px;border-radius:5px;border:1.5px solid var(--green);margin-top:1px;
-    display:flex;align-items:center;justify-content:center;font-size:13px;color:#04130c;transition:background .12s}
-  .ck.on .box{background:var(--green)}
-  .ck .ctext{font-family:var(--display);font-size:14px;line-height:1.5;color:var(--ink)}
-  .ck.on .ctext{color:var(--dim);text-decoration:line-through}
+  .fq-prompt{border:1px solid var(--line);border-radius:11px;margin:8px 0;overflow:hidden;background:#fffaf6}
+  .fq-prompt > button{width:100%;text-align:left;display:flex;gap:10px;align-items:center;padding:11px 14px;background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:14.5px;font-weight:600;color:var(--ink)}
+  .fq-prompt .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-deep);font-weight:700;background:rgba(240,101,79,.10);padding:2px 7px;border-radius:5px}
+  .fq-prompt .pv{display:none;padding:0 14px 14px}
+  .fq-prompt.open .pv{display:block}
+  .fq-prompt .txt{font-family:var(--mono);font-size:13px;line-height:1.55;color:#3a302b;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 13px;white-space:pre-wrap}
+  .fq-prompt .copy{margin-top:9px;font-family:var(--sans);font-size:12.5px;font-weight:700;color:var(--blue);background:none;border:1px solid rgba(58,110,165,.35);border-radius:7px;padding:6px 12px;cursor:pointer}
+  .fq-prompt .copy:hover{background:rgba(58,110,165,.08)}
 
-  .prompt{position:relative;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:9px;padding:14px;margin-top:6px}
-  .prompt p{font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--amber);white-space:pre-wrap}
-  .copy{position:absolute;top:10px;right:10px;background:rgba(39,245,160,.12);border:1px solid var(--line);
-    color:var(--green);border-radius:6px;padding:4px 9px;font-size:11px;cursor:pointer;font-family:var(--mono)}
+  .fq-note{font-size:14px;line-height:1.55;color:#4a413a;background:#fff7f2;border-left:3px solid var(--coral);border-radius:0 8px 8px 0;padding:11px 14px;margin:10px 0}
+  .fq-note.u18{border-left-color:var(--blue);background:#f4f7fb}
+  .fq-note.verify{border-left-color:#c98a2e;background:#fbf6ee}
+  .fq-note b{color:var(--ink)}
 
-  .oracle{margin-top:16px;border:1px dashed var(--amber);border-radius:9px;padding:14px}
-  .oracle h4{color:var(--amber);font-size:12px;letter-spacing:.12em;margin-bottom:7px}
-  .oracle p{color:var(--dim);font-size:12.5px;line-height:1.55;font-family:var(--display)}
-  .obtn{margin-top:10px;background:rgba(255,179,71,.12);border:1px solid var(--amber);color:var(--amber);
-    border-radius:7px;padding:8px 12px;font-family:var(--mono);font-size:12px;cursor:pointer}
-  .olog{list-style:none;margin-top:10px}
-  .olog li{font-family:var(--display);font-size:13px;color:var(--ink);padding:6px 0 6px 16px;position:relative}
-  .olog li::before{content:"\2713";position:absolute;left:0;color:var(--amber)}
+  .fq-ft{display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:#241f1c;color:#f0e8de;border-radius:11px;padding:14px 16px;margin:14px 0 4px}
+  .fq-ft .cx{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#e0a58e;border:1px solid rgba(224,165,142,.4);border-radius:5px;padding:3px 8px}
+  .fq-ft .ms{font-size:13.5px;line-height:1.5;color:#cfc4b7;flex:1;min-width:180px}
+  .fq-ft .ms b{color:#fff}
+  .fq-ft a{margin-left:auto;font-size:13.5px;font-weight:700;color:#f6a488;white-space:nowrap}
+  .fq-ft a:hover{color:#fff}
 
-  .done{margin-top:16px;color:var(--green);font-size:12.5px;line-height:1.55;font-family:var(--display)}
-  .done b{color:var(--amber)}
-  .clear{margin-top:16px;width:100%;background:transparent;border:1px solid var(--green);color:var(--green);
-    border-radius:9px;padding:12px;font-family:var(--display);font-weight:700;font-size:14px;cursor:pointer}
-  .lvl.cleared .clear{background:var(--green);color:#04130c;border-color:var(--green)}
-  .clear.notready{border-color:var(--amber);color:var(--amber);background:transparent;cursor:not-allowed;opacity:.9}
-  @keyframes shakeX{10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(2px)}
-    30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
-  .clear.shake{animation:shakeX .42s}
+  .fq-done{font-size:14px;line-height:1.55;color:var(--dim);margin:14px 0 2px}
+  .fq-done b{color:var(--coral-deep)}
 
-  .foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;
-    flex-wrap:wrap;gap:10px;font-size:11px;letter-spacing:.06em;color:var(--dim);align-items:center}
-  .foot .lnks{display:flex;gap:14px;flex-wrap:wrap}
-  .lnk,.reset{background:none;border:0;color:var(--dim);cursor:pointer;font-family:var(--mono);font-size:11px;text-decoration:underline}
-  .lnk{color:var(--green)}
-  .hidden{display:none}
+  .fq-bonus{display:flex;gap:22px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:linear-gradient(135deg,var(--coral),var(--coral-deep));color:#fff;border-radius:16px;padding:24px 30px;margin:22px 0 8px;text-decoration:none;transition:box-shadow .2s ease}
+  .fq-bonus:hover{text-decoration:none;box-shadow:0 16px 40px rgba(240,101,79,.34)}
+  .fq-bonus .bk{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.85}
+  .fq-bonus .bh{font-family:var(--serif);font-weight:700;font-size:24px;margin:5px 0 6px}
+  .fq-bonus .bp{font-size:14.5px;line-height:1.55;opacity:.95;max-width:62ch;margin:0}
+  .fq-bonus .barrow{font-weight:700;font-size:15px;white-space:nowrap}
 
-  /* celebration */
-  .cele{position:fixed;inset:0;z-index:150;display:flex;align-items:center;justify-content:center;padding:24px;
-    background:rgba(2,4,9,.82);backdrop-filter:blur(3px);animation:fade .4s ease}
-  @keyframes fade{from{opacity:0}}
-  .celecard{width:min(560px,100%);background:linear-gradient(180deg, rgba(11,16,32,.97), rgba(5,7,13,.97));
-    border:1px solid var(--green);border-radius:16px;padding:38px 34px;text-align:center;
-    box-shadow:0 0 80px rgba(39,245,160,.25)}
-  .cstamp{font-family:var(--display);font-weight:800;font-size:clamp(32px,7vw,54px);color:var(--green);
-    text-shadow:0 0 36px rgba(39,245,160,.5);letter-spacing:-.02em;line-height:1.02}
-  .csub{color:var(--ink);font-family:var(--display);font-size:15px;line-height:1.6;margin:16px 0 4px;opacity:.92}
-  .cstat{color:var(--amber);font-family:var(--mono);font-size:12px;letter-spacing:.1em;margin-top:18px}
-  .confetti{position:fixed;top:-14px;width:9px;height:14px;opacity:.9;z-index:160;animation:fall linear forwards}
-  @keyframes fall{to{transform:translateY(106vh) rotate(560deg)}}
+  .fq-stuck{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px 28px;display:flex;gap:26px;align-items:center;flex-wrap:wrap;margin:20px 0 8px}
+  .fq-stuck img{width:96px;height:96px;object-fit:contain;flex:none}
+  .fq-stuck .cp{flex:1;min-width:280px}
+  .fq-stuck .cp .h{font-family:var(--serif);font-weight:700;font-size:22px;margin-bottom:7px}
+  .fq-stuck .cp p{font-size:15.5px;line-height:1.6;color:var(--dim);margin:0}
+  .fq-stuck .btns{display:flex;flex-direction:column;gap:9px}
+  .fq-stuck .btns a{border:1.5px solid rgba(58,110,165,.30);color:var(--blue);font-weight:700;font-size:14.5px;padding:11px 20px;border-radius:9px;white-space:nowrap;text-align:center}
+  .fq-stuck .btns a:hover{border-color:var(--blue);text-decoration:none}
+  .fq-reset{margin:14px 0 60px;background:none;border:none;padding:0;cursor:pointer;font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--dim)}
+  .fq-reset:hover{color:var(--ink)}
 </style>
-  <meta property="og:title" content="FOUNDER QUEST">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://buildactually.org/founder-quest.html">
-  <meta property="og:image" content="https://buildactually.org/assets/og-card.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Build, Actually, build something actual">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="FOUNDER QUEST">
-  <meta name="twitter:image" content="https://buildactually.org/assets/og-card.png">
-  <meta property="fb:app_id" content="1699619567919904">
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '2633650787050149');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=2633650787050149&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "NGO",
-      "@id": "https://buildactually.org/#foundation",
-      "name": "AI Actually Foundation",
-      "url": "https://buildactually.org/",
-      "foundingDate": "2026-06-25",
-      "description": "A 501(c)(3) nonprofit public benefit corporation dedicated to free AI literacy for everyday people, families, and small businesses."
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://buildactually.org/#org",
-      "name": "Build, Actually",
-      "url": "https://buildactually.org/",
-      "logo": "https://buildactually.org/assets/logo.png",
-      "description": "An independent community where regular people build real, life-changing things with AI. Free guides, a build-along game, and a friendly AI co-pilot in the mix.",
-      "parentOrganization": {
-        "@id": "https://buildactually.org/#foundation"
-      },
-      "sameAs": [
-        "https://www.facebook.com/1144702145396074",
-        "https://www.facebook.com/groups/2714824692233227"
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://buildactually.org/#website",
-      "url": "https://buildactually.org/",
-      "name": "Build, Actually",
-      "publisher": {
-        "@id": "https://buildactually.org/#org"
-      }
-    }
-  ]
-}
-</script>
 </head>
 <body>
-<div class="wrap">
-  <main class="card">
-    <div class="bar">
-      <span class="dot g"></span><span class="dot"></span><span class="dot"></span>
-      <span>founder_quest.exe</span><span class="id" id="barid">CHARACTER CREATION</span>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="Build, Actually">
+      <span class="bn">Build, Actually</span>
+    </a>
+    <div class="links">
+      <a href="founder-kit.html">The Founder Kit</a>
+      <a href="meta-ads.html">Meta Ads</a>
+      <a href="grandparents.html">For Grandparents</a>
+      <a href="community.html">Community</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
     </div>
-    <div class="body">
+  </div>
+</nav>
 
-      <section id="gate">
-        <div class="stamp">FOUNDER QUEST</div>
-        <div class="sub">A real business, built over a couple of months, using AI and a laptop. Fill in your character sheet to begin. Every field shapes your run, and everything saves on this device as you go.</div>
-        <div class="field"><label>Founder name / codename</label>
-          <input id="f_name" placeholder="Maverick, Nova, your call sign" autocomplete="off"></div>
-        <div class="field"><label>Starting gold (your budget)</label>
-          <input id="f_gold" placeholder="$5,000  /  $500  /  whatever's real" autocomplete="off">
-          <div class="hint">Any number works, even $0. It sets your run mode, it never locks you out.</div></div>
-        <div class="field"><label>Launch day (your final-boss deadline)</label>
-          <input id="f_deadline" type="date"></div>
-        <div class="field"><label>Hours per week you'll grind</label>
-          <input id="f_hours" placeholder="15 to 20 a week is a normal pace" autocomplete="off"></div>
-        <div id="gateMsg"></div>
-        <button class="btn" id="beginBtn">BEGIN &#9656;</button>
-        <div class="foot"><span>DESIGNED IN CALIFORNIA &middot; A BUILD, ACTUALLY GIVEAWAY</span></div>
-      </section>
+<div class="fq-wrap">
 
-      <section id="bootScreen" class="hidden"><div id="boot"></div></section>
+  <section class="fq-intro">
+    <div class="kicker">Founder Quest &middot; your build log</div>
+    <h1>Where are you in the build?</h1>
+    <p>Six phases, blank page to launched business. Tick things off as you finish them. It saves in your browser, <b>no account, nothing uploaded</b>. Every time you catch the AI being wrong, log it, that is the achievement that actually matters.</p>
+  </section>
 
-      <section id="mission" class="hidden">
-        <div class="hud"><div class="who" id="whoName"></div></div>
-        <div class="flavor" id="flavor"></div>
-        <div class="stats" id="stats"></div>
-        <div class="pbar"><div class="pfill" id="pfill"></div></div>
-        <div id="levels"></div>
-        <div class="foot">
-          <span class="lnks">
-            <button class="lnk" id="saveBtn">save backup</button>
-            <button class="lnk" id="loadBtn">load backup</button>
-            <button class="reset" id="resetBtn">reset</button>
-          </span>
-          <span>CATCH THE ORACLE LYING, ONCE PER LEVEL</span>
-        </div>
-        <input type="file" id="loadFile" accept=".json,application/json" class="hidden">
-      </section>
-
+  <section class="fq-top">
+    <div class="fq-prog">
+      <div class="head"><div class="n"><span id="doneCount">0</span> of <span id="totalCount">0</span> milestones</div><div class="pct" id="pctLabel">0%</div></div>
+      <div class="fq-bar"><div class="fq-fill" id="fill"></div></div>
+      <div class="fq-dots" id="dots"></div>
     </div>
-  </main>
+    <div class="fq-catch">
+      <div class="t">Caught the AI lying</div>
+      <div class="num" id="catchNum">0</div>
+      <div class="sub">Times you caught the AI being confidently wrong and wrote it down.</div>
+      <button id="catchBtn">+ Log a catch</button>
+    </div>
+  </section>
+
+  <section class="fq-phases" id="phases"></section>
+
+  <a class="fq-bonus" href="meta-ads.html">
+    <div>
+      <div class="bk">Bonus round &middot; the door behind launch</div>
+      <div class="bh">Get more customers</div>
+      <p class="bp">You built and launched something real. When you're ready to grow it, the Meta Ads playbook is waiting: honest, small tests, and reading the real numbers instead of a guru's promise.</p>
+    </div>
+    <span class="barrow">Open the playbook &#8594;</span>
+  </a>
+
+  <div class="fq-stuck">
+    <img src="assets/mascot.png" alt="The coral plush co-pilot">
+    <div class="cp">
+      <div class="h">Stuck on a phase?</div>
+      <p>Every phase is here in full, nothing behind an email wall. Want the deeper why behind each step? The guide walks all six phases in print. Still stuck? Come ask in the Group, a human named Danny and an AI co-pilot both answer, out in the open.</p>
+    </div>
+    <div class="btns">
+      <a href="pdf/The-Founder-Guide.pdf">Read the guide</a>
+      <a href="https://www.facebook.com/groups/2714824692233227" target="_blank" rel="noopener">Ask in the Group</a>
+    </div>
+  </div>
+  <button class="fq-reset" id="resetBtn">Reset my progress</button>
+
 </div>
 
+<footer class="site">
+  <span class="sign">Love, C</span>
+  <div class="row">
+    <a href="https://www.facebook.com/1144702145396074" target="_blank" rel="noopener">Facebook Page</a>
+    <span class="sep">&middot;</span>
+    <a href="https://www.facebook.com/groups/2714824692233227" target="_blank" rel="noopener">The Group</a>
+    <span class="sep">&middot;</span>
+    <a href="privacy.html">Privacy</a>
+    <span class="sep">&middot;</span>
+    <a href="terms.html">Terms</a>
+  </div>
+  <p class="indep">Build, Actually is an <b>independent</b> community and a program of the <a href="https://aiactuallyfoundation.org" target="_blank" rel="noopener">AI Actually Foundation</a>, a 501(c)(3) nonprofit public benefit corporation. A human hosts it and an AI co-pilot helps out in the open.</p>
+</footer>
+
 <script>
-const KEY = "founderQuest.v1";
 const PHASES = [
-  {n:1,title:"Laptop & Tools",goal:"Get fluent on your laptop and your AI tools before you build anything.",
-   checks:["Laptop set up and personalized (accounts, password manager)","Core tools installed: two browsers, a notes app, your AI assistant, a free Google account","Founder's Journal started (your first 'AI got it wrong' entry lives here)","2 hours of keyboard shortcuts + 2 hours of laptop tutorials","Project folders built: 01-Research through 06-Finances","Ran a 'learn to prompt' session: same question vague vs specific, then made the AI critique itself"],
-   prompt:"Ask your AI the same question two ways.\nLazy: \"how do I start a business?\"\nLike a pro: \"I have [GOLD] and about 10 hours a week. Give me 5 first steps to start an online business, in order, with why each one matters.\"\nThen paste the lazy answer back and say: \"Critique this answer. What did it miss?\"",
-   done:"You move around the laptop without thinking, you can ask a good question, and your first AI mistake is logged."},
-  {n:2,title:"Idea & Validation",goal:"Find and pick a real business that's yours. The hardest, most important level.",
-   checks:["20 ideas brainstormed (volume first, no filtering)","Narrowed to 5 with the scoring rubric","Market research on each finalist","Interviewed 5 real people in the target market (real talks, not surveys)","Picked ONE idea with a 1-2 page memo defending it","Ran it through the 3 validation questions","Defined your ideal customer"],
-   prompt:"Here's me: my interests are [...], skills I have or could learn fast are [...]. I have [GOLD] and about 10 hours a week. Don't suggest generic ideas. Find business ideas that sit at the intersection of what I'm into and what people actually pay for. For each, tell me why it fits me specifically.",
-   done:"You can explain the business in one sentence, name your customer, and say why they'd pay. Killing a bad idea here counts as a win."},
-  {n:3,title:"Legal Foundation",goal:"Decide your structure, then make the business real.",
-   checks:["One-page memo: sole prop vs LLC vs S-corp-later. Pick one and defend it","Got your coach's green light before filing","Verified the business name (state database, domain, handles)","Filed your structure","Got an EIN from the IRS (free, ~15 min)","Opened a business bank account","Set up free bookkeeping and logged your laptop as a business asset"],
-   prompt:"I'm starting an online business in [your state]. My business is [description]. Compare sole proprietorship, single-member LLC, and S-corp-later on cost, paperwork, liability, taxes, and complexity. Be honest about which makes sense under $50K first-year revenue. Tell me the real state-specific fees and which ones recur every year.\n\n(Then verify those numbers yourself. The AI gets fees and dates wrong, confidently. That's your catch.)",
-   done:"You chose a structure you can defend, filed it, and have an EIN and a bank account."},
-  {n:4,title:"Brand Foundation",goal:"Build a brand that doesn't look like every other side hustle.",
-   checks:["One-page brand brief (what, who, what's different, voice)","Researched 10 competitors","Color palette + fonts chosen","Logo made (transparent PNG + square social version)","3 sample headlines + 3 captions in your voice","Domain + matching social handles secured in one sitting"],
-   prompt:"I'm building a brand for [business]. Target customer: [description]. Give me (1) a one-sentence positioning statement, (2) three voice adjectives with examples, (3) five brand names with reasoning, (4) three taglines. Push back if my positioning is generic. I want to stand out, not blend in.",
-   done:"You have a logo, palette, fonts, and a brief someone else could make on-brand work from. Don't spend three days on a font."},
-  {n:5,title:"Website Build",goal:"Launch a real website you own and can explain.",
-   checks:["Domain purchased and connected","Platform chosen and set up","Pages: Home, About, Product/Service, Contact, Footer","Mobile-first (looks great on a phone)","All copy written by you (AI edits, you author)","A real email address on your domain","A way to take payment or capture a lead","Tested on phone, tablet, and laptop"],
-   prompt:"Write copy for my website. Business: [description]. Customer: [description]. Voice: [3 adjectives]. Give me (1) a hero headline (10 words max) and subheading, (2) a 3-paragraph About on why I started this, (3) a value proposition, (4) CTA button text that isn't generic. Read like a real person, not AI. No marketing speak.",
-   done:"A stranger gets what you do in 5 seconds and knows how to buy or contact you in 30. And you can explain every line of code or copy before you paste it in."},
-  {n:6,title:"Launch & First Traction",goal:"The final boss. Get the first customer, or learn exactly why you couldn't.",
-   checks:["Social accounts on 2 platforms","First 10 pieces of content posted","Soft-launched to your own network first","Direct outreach to 20 potential customers","Lead capture live","(If budget allows) one small paid test, results read","First sale OR a write-up of why none happened and what you'd change","Launch retrospective written"],
-   prompt:"My business is launching: [description]. Customer: [description]. Budget left: [remaining]. Build a 30-day launch plan that (1) doesn't rely only on paid ads, (2) uses my network and social, (3) has specific daily actions, (4) measurable goals, (5) an honest take on whether it can hit them. Push back if my targets are unrealistic.",
-   done:"You launched. You got customers, or you learned exactly why you didn't. Either is a win. Failure with learning beats fake success."}
+  {
+    n:"01", short:"Set up", name:"Get set up",
+    blurb:"Get comfortable on your laptop and your AI before you build anything.",
+    items:[
+      "Laptop set up and personalized, with a password manager",
+      "Your core tools installed and explored: two browsers, a notes app, your AI assistant, and a free Google account (Docs, Sheets, Drive, Gmail all run in the browser, nothing to download)",
+      "Your Founder's Journal started, this is where your first “the AI got it wrong” entry lives",
+      "A couple hours on keyboard shortcuts, and a couple on the basics (finding files, switching windows)",
+      "A project folder set up: Business/ with 01-Research, 02-Legal, 03-Brand, 04-Website, 05-Marketing, 06-Finances",
+      "A “learn to prompt” session: ask the same question vaguely, then specifically, then ask the AI to critique its own answer"
+    ],
+    prompts:[
+      {tag:"Warm-up", label:"Get pointed in the right direction", text:"I'm brand new to using AI to build a real business, and I'm not very technical. Ask me 5 questions about my situation, then give me the 3 things I should learn on my laptop this week. Keep it plain, no jargon."}
+    ],
+    note:"The one habit we build from day one: catch the AI being wrong and write it down. Your journal is where that lives, and it starts this week.",
+    ctch:"During the prompt practice, push the AI until it says something wrong or sloppy, then log it. Easy first catch.",
+    cipher:"HEX", mission:"your journal, started, with your first caught mistake logged",
+    doneWhen:"you move around the laptop without thinking, you can ask the AI a good question, your journal is started, and your first AI mistake is logged."
+  },
+  {
+    n:"02", short:"Idea", name:"Find & prove your idea",
+    blurb:"Find a business that's yours, then prove real people want it before you build.",
+    items:[
+      "Brainstormed at least 20 ideas (volume first, no filtering)",
+      "Narrowed to 5 using the scoring rubric (below)",
+      "Market research on each finalist",
+      "Interviewed at least 5 real people in your target market (real conversations, not surveys)",
+      "Picked ONE idea with a 1–2 page memo defending it",
+      "Ran it through the three validation questions (below)",
+      "Defined your ideal customer in detail"
+    ],
+    prompts:[
+      {tag:"Fit", label:"Ideas that fit you specifically", text:"Here's me: my interests are [...], skills I have or could learn fast are [...], my starting budget is [your budget] and I have about [X] hours a week. Don't suggest generic ideas. Find business ideas that sit where what I'm into meets what people actually pay for. For each, tell me why it fits me specifically."},
+      {tag:"Volume", label:"Brainstorm 20 ideas", text:"Brainstorm 20 online business ideas I could start with [your budget] and run in about [X] hours a week. For each: what it does, who the customer is, why they'd pay, realistic beginner monthly revenue, and the main risk. Don't pad. Be honest about which are oversaturated."},
+      {tag:"Problems", label:"Turn problems into businesses", text:"Here are 10 problems or annoyances I or people around me actually deal with: [list them]. Turn each into a possible business. Which of these would people pay to make go away?"},
+      {tag:"Stress test", label:"Argue why it fails", text:"My favorite idea so far is [idea]. Argue why it will fail. Be brutal. Give me the 5 most likely reasons it flops and what would have to be true to survive each one."},
+      {tag:"Competitors", label:"Find the gap", text:"For [idea], who are the existing players? Show me 5, what they charge, and where there's a gap a scrappy newcomer could win. Be specific, not “offer better service.”"}
+    ],
+    note:"<b>The scoring rubric</b> (score each idea 1–5): personal interest (will I still care in 6 months?), realistic with my budget, time-realistic, solves a real problem, online-friendly. Top 5 move on.<br><br><b>The three validation questions:</b> Who specifically has this problem? What are they doing about it now? Why would they pay <i>you</i>? (Not “because I'm cheaper.” That's a race to the bottom.)",
+    ctch:"The AI loves to invent competitors and make up “realistic monthly revenue.” Verify one, find it wrong, log it.",
+    cipher:"ROT13", mission:"your chosen idea, defended in writing, plus your five interviews",
+    doneWhen:"you can explain your business in one sentence, name your customer, and say why they'd pay. Killing a bad idea here counts as a win, not a failure."
+  },
+  {
+    n:"03", short:"Legal", name:"Make it legal",
+    blurb:"Decide your structure, then make the business real: filing, EIN, and a bank account.",
+    items:[
+      "A one-page memo comparing sole proprietorship, single-member LLC, and S-corp-later on cost, paperwork, liability, taxes, and complexity. Pick one and defend it",
+      "Slept on it and read the memo back cold before filing",
+      "Verified your business name (state database, domain, social handles)",
+      "Filed your chosen structure",
+      "Got an EIN from the IRS (free, about 15 minutes)",
+      "Opened a business bank account, business money never mixes with personal",
+      "Set up free bookkeeping and logged your laptop as your first business asset",
+      "Checked whether your business needs a local license"
+    ],
+    prompts:[
+      {tag:"Structure", label:"Compare sole prop / LLC / S-corp", text:"I'm starting an online business in [your state]. My business is [description]. Compare sole proprietorship, single-member LLC, and S-corp-later on cost, paperwork, liability, taxes, and complexity. Be honest about which makes sense for a first-time founder under $50K first-year revenue. Tell me the real, state-specific fees and which ones recur every year, and remind me to verify each on my state's own site."}
+    ],
+    note:"The <b>decision</b> comes before the paperwork, and it's yours to research and defend, not just accept a default.",
+    verify:"Fees and taxes vary by state and change over time. Treat any number the AI gives you (or any you read here) as “verify on my state's official site.” A short call with a CPA or attorney is cheap insurance.",
+    u18:"Have a parent look the memo over, and set up the bank account and any filings with you.",
+    ctch:"This is the easiest phase to catch the AI. Legal fees and tax numbers are exactly where it guesses confidently and gets it wrong. Check one against your state's real site, find the gap, log it.",
+    cipher:"BINARY", mission:"proof you can legally take a dollar, your filing, EIN, and bank account",
+    doneWhen:"you chose a structure and can defend why, the business is filed, EIN and bank account in hand, and you know what you owe and when."
+  },
+  {
+    n:"04", short:"Brand", name:"Brand it",
+    blurb:"Build a brand that doesn't look like every other side hustle.",
+    items:[
+      "One-page brand brief: what you do (one sentence), who it's for, what makes you different, voice (3–5 adjectives)",
+      "Researched 10 competitors and screenshotted their branding",
+      "A color palette (3–5 hex codes) and typography (1–2 free fonts)",
+      "A logo (AI image gen, then refine): a transparent PNG and a square social version",
+      "3 sample headlines and 3 sample captions in your voice",
+      "Domain and matching social handles secured in one sitting so they line up"
+    ],
+    prompts:[
+      {tag:"Brand", label:"Positioning that isn't generic", text:"I'm building a brand for [business description]. My target customer is [description]. Help me develop: (1) a one-sentence positioning statement, (2) three tone-of-voice adjectives with examples, (3) five brand names with reasoning, (4) three tagline options. Push back if my positioning is generic. I want to stand out, not blend in."},
+      {tag:"Logo", label:"Logo variations", text:"Create a clean, modern logo for [brand name], a [business description] for [audience]. Style: [3 adjectives]. Colors: [palette]. It must work as a small social profile picture and a large website header. Show me 4 variations."}
+    ],
+    note:"The real deliverable is a brief someone else could make on-brand content from without asking you a thing. And don't spend three days on a font, set a deadline and ship.",
+    ctch:"Ask the AI for a logo with text in it, or whether a brand name is “available.” Watch it mangle letters or call a taken name free. Log it.",
+    cipher:"MORSE", mission:"a brand a stranger would recognize as yours, logo, palette, and a brief",
+    doneWhen:"you have a logo, palette, fonts, and a brief someone else could create on-brand content from. Don't spend three days on a font."
+  },
+  {
+    n:"05", short:"Site", name:"Build the site",
+    blurb:"Launch a real website you own, and can explain every line of.",
+    items:[
+      "Domain purchased and connected",
+      "Platform chosen with the decision tree (below) and set up",
+      "Pages: Home, About, Product/Service, Contact, Footer with legal links",
+      "Mobile-first: looks at least as good on a phone as on a laptop",
+      "All copy written by you (AI edits, you author). No placeholders",
+      "A real email address on your domain",
+      "A way to take payment or capture a lead",
+      "Tested on phone, tablet, and laptop"
+    ],
+    prompts:[
+      {tag:"Copy", label:"Website copy in your voice", text:"I'm writing copy for my business website. Business: [description]. Customer: [description]. Brand voice: [3 adjectives]. Write: (1) a hero headline (10 words max) and subheading (20 max), (2) a 3-paragraph About explaining why I started this, (3) a value proposition for the product page, (4) CTA button text that isn't generic. Read like a real person, not AI. No marketing speak."}
+    ],
+    note:"<b>Platform decision tree:</b> physical products → Shopify. Digital products or courses → Squarespace or Webflow. Service with bookings → Squarespace plus a scheduler. Portfolio or one-pager → Carrd (cheapest) or Squarespace.<br><br><b>“Explain this” comes before “make it work.”</b> Before you paste in any AI-built code or copy, you have to be able to say what it does.",
+    ctch:"When the AI hands you code, make it explain each line before you paste it, then find one line that doesn't do what it claimed. Log it.",
+    cipher:"ATBASH", mission:"a live site where a stranger gets what you do in 5 seconds and how to buy in 30",
+    doneWhen:"a stranger finds your site, gets what you do in 5 seconds, knows how to buy or contact you in 30, and you can explain every piece of it."
+  },
+  {
+    n:"06", short:"Launch", name:"Launch it",
+    blurb:"Put it in public and get your first customer, or learn exactly why you didn't.",
+    items:[
+      "Social accounts on at least 2 platforms",
+      "First 10 pieces of content posted",
+      "Soft-launched to your own network first (the people you interviewed in Phase 2)",
+      "Direct outreach to at least 20 potential customers",
+      "Lead capture live",
+      "If your budget allows, one small paid-traffic test, results read: cost per click, per lead, per sale",
+      "First sale OR a detailed write-up of why none happened and what you'd change",
+      "A launch retrospective: what worked, what didn't, what's next"
+    ],
+    prompts:[
+      {tag:"Plan", label:"A 30-day launch plan", text:"My business is launching: [description]. Customer: [description]. Budget for launch marketing: [remaining]. Build me a 30-day launch plan that (1) doesn't rely only on paid ads, (2) uses my network and social, (3) has specific daily actions, not vague ones like “post on social,” (4) has measurable goals, (5) honestly assesses whether it can hit them. Push back if my targets are unrealistic."}
+    ],
+    note:"Soft-launch to the very people you interviewed back in Phase 2, <i>first</i>. They already told you the problem was real. Then read your numbers honestly, cost per click, per lead, per sale.",
+    ctch:"The launch plan will promise numbers that sound great and aren't realistic. Make the AI defend one target, watch it fold, log it. Last catch of the run.",
+    cipher:"CAESAR", mission:"a live launch, and your first customers or an honest write-up of why not",
+    doneWhen:"you launched. You got customers, or you learned exactly why you didn't. Either is a win. Failure with learning beats fake success."
+  }
 ];
 
-let S = load();
+const KEY = "ba-build-log";
+let state = { done:{}, catches:0, open:-1 };
+try { const raw = localStorage.getItem(KEY); if (raw) state = Object.assign(state, JSON.parse(raw)); } catch(e){}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
 
-function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || null; }catch(e){ return null; } }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
-function fresh(f){
-  S = { founder:f, checks:{}, cleared:{}, oracle:{}, celebrated:false };
-  PHASES.forEach(p=>{ S.checks[p.n]=p.checks.map(()=>false); S.cleared[p.n]=false; S.oracle[p.n]=[]; });
-  save();
+const totalCount = PHASES.reduce((n,p)=>n+p.items.length,0);
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function render(){
+  const doneCount = Object.values(state.done).filter(Boolean).length;
+  const pct = totalCount ? Math.round(doneCount/totalCount*100) : 0;
+  document.getElementById("doneCount").textContent = doneCount;
+  document.getElementById("totalCount").textContent = totalCount;
+  document.getElementById("pctLabel").textContent = pct + "%";
+  document.getElementById("fill").style.width = pct + "%";
+  document.getElementById("catchNum").textContent = state.catches;
+
+  document.getElementById("dots").innerHTML = PHASES.map((p,pi)=>{
+    const dh = p.items.filter((_,i)=>state.done[pi+"-"+i]).length;
+    const c = dh===p.items.length ? "var(--coral)" : dh>0 ? "#e5a38f" : "#f2e6dd";
+    return `<div class="d"><div class="seg" style="background:${c}"></div><div class="lb">${esc(p.short)}</div></div>`;
+  }).join("");
+
+  document.getElementById("phases").innerHTML = PHASES.map((p,pi)=>{
+    const dh = p.items.filter((_,i)=>state.done[pi+"-"+i]).length;
+    const complete = dh===p.items.length;
+    const open = state.open===pi;
+    const items = p.items.map((label,i)=>{
+      const on = !!state.done[pi+"-"+i];
+      return `<button class="${on?"on":""}" data-act="item" data-p="${pi}" data-i="${i}"><span class="box">${on?"✓":""}</span><span class="lbl">${esc(label)}</span></button>`;
+    }).join("");
+    const prompts = (p.prompts||[]).map((pr,pj)=>`
+      <div class="fq-prompt" data-pp="${pi}-${pj}">
+        <button data-act="prompt" data-pp="${pi}-${pj}"><span class="tag">${esc(pr.tag)}</span><span>${esc(pr.label)}</span></button>
+        <div class="pv"><div class="txt">${esc(pr.text)}</div><button class="copy" data-act="copy" data-pp="${pi}-${pj}">Copy prompt</button></div>
+      </div>`).join("");
+    return `
+    <div class="fq-ph ${complete?"done":""} ${open?"open":""}">
+      <button class="bar" data-act="toggle" data-p="${pi}">
+        <span class="dot">${p.n}</span>
+        <span class="meta"><span class="nm">${esc(p.name)}</span><span class="bl">${esc(p.blurb)}</span></span>
+        <span class="cnt">${dh}/${p.items.length}</span>
+        <span class="chev">${open?"▲":"▼"}</span>
+      </button>
+      <div class="fq-body">
+        <h4>The checklist</h4>
+        <div class="fq-items">${items}</div>
+        ${prompts?`<h4>Prompts to paste into your AI</h4>${prompts}`:""}
+        ${p.note?`<div class="fq-note">${p.note}</div>`:""}
+        ${p.verify?`<div class="fq-note verify"><b>Verify it yourself:</b> ${esc(p.verify)}</div>`:""}
+        ${p.u18?`<div class="fq-note u18"><b>Under 18?</b> ${esc(p.u18)}</div>`:""}
+        ${p.ctch?`<div class="fq-note"><b>Catch the AI:</b> ${esc(p.ctch)}</div>`:""}
+        <div class="fq-ft"><span class="cx">${esc(p.cipher)}</span><span class="ms"><b>Field test:</b> decode the access code, then the mission inside: ${esc(p.mission)}.</span><a href="field-tests/phase-${pi+1}.html">Open the locked file →</a></div>
+        <div class="fq-done"><b>Done when:</b> ${esc(p.doneWhen)}</div>
+      </div>
+    </div>`;
+  }).join("");
 }
-function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-const $ = id => document.getElementById(id);
-function val(id){ return $(id).value.trim(); }
 
-/* --- input intelligence --- */
-function parseMoney(s){ var n=parseFloat(String(s).replace(/[^0-9.]/g,"")); return isNaN(n)?0:n; }
-function tierOf(n){ if(n>=2000) return "FULL"; if(n>=200) return "LEAN"; return "NEAR-FREE"; }
-function tierFlavor(t){ return t==="FULL" ? "Full budget. Room for paid tools and a real ad test."
-  : t==="LEAN" ? "Lean run. Free and cheap tools, scrappy launch, same six levels."
-  : "Near-free run. Free tools and hustle. The scrappiest founders start right here."; }
-function fmtDate(iso){ try{ return new Date(iso+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }catch(e){ return iso; } }
-function computeWarning(hoursNum, iso){
-  if(!iso) return {level:"none",msg:""};
-  var now=new Date(); now.setHours(0,0,0,0);
-  var d=new Date(iso+"T00:00:00");
-  var days=Math.round((d-now)/86400000);
-  if(days<0) return {level:"warn",msg:"Heads up: that launch day is already in the past. Pick a date in the future so there's a real finish line."};
-  var weeks=Math.max(days/7,0.1), total=hoursNum*weeks;
-  if(total<12) return {level:"err",msg:"Real talk: about "+hoursNum+" hour"+(hoursNum===1?"":"s")+" a week until "+fmtDate(iso)+" is roughly "+Math.round(total)+" hours total. There isn't enough runway there to build and launch a real business. Move the date out, add hours, or go in knowing this is the long game, not a quick sprint."};
-  if(total<60) return {level:"warn",msg:"Just so you know: at "+hoursNum+" hour"+(hoursNum===1?"":"s")+" a week this is more marathon than sprint. Totally doable, just pace it like a school-year build, not a two-week dash."};
-  return {level:"none",msg:""};
-}
-
-/* --- gate --- */
-let warned=false;
-function gateMsg(text, kind){ var el=$("gateMsg"); el.className=kind||""; el.textContent=text; el.style.display = kind ? "block" : "none"; }
-function tryBegin(){
-  var name=val("f_name"), gold=val("f_gold"), deadline=val("f_deadline"), hours=val("f_hours");
-  if(!name||!gold||!deadline||!hours){ gateMsg("Fill in your whole character sheet to begin. Every field shapes the run.", "err"); return; }
-  var w=computeWarning(parseMoney(hours), deadline);
-  if(w.level!=="none" && !warned){
-    gateMsg(w.msg + "   Tap START ANYWAY to roll with it, or tweak your sheet above.", w.level);
-    warned=true; $("beginBtn").textContent="START ANYWAY ▸"; return;
+document.addEventListener("click", e=>{
+  const t = e.target.closest("[data-act]");
+  if(!t) return;
+  const act = t.dataset.act;
+  if(act==="toggle"){ const pi=+t.dataset.p; state.open = state.open===pi?-1:pi; save(); render(); }
+  else if(act==="item"){ const k=t.dataset.p+"-"+t.dataset.i; state.done = Object.assign({}, state.done, {[k]:!state.done[k]}); save(); render(); }
+  else if(act==="prompt"){ t.closest(".fq-prompt").classList.toggle("open"); }
+  else if(act==="copy"){
+    const [pi,pj]=t.dataset.pp.split("-");
+    const txt=PHASES[+pi].prompts[+pj].text;
+    navigator.clipboard && navigator.clipboard.writeText(txt);
+    const o=t.textContent; t.textContent="Copied ✓"; setTimeout(()=>t.textContent=o,1400);
   }
-  var goldNum=parseMoney(gold);
-  fresh({ name:name, gold:gold, goldNum:goldNum, tier:tierOf(goldNum), deadline:deadline, hours:hours, hoursNum:parseMoney(hours) });
-  boot();
-}
-["f_name","f_gold","f_deadline","f_hours"].forEach(id=>{
-  $(id).addEventListener("input", ()=>{ warned=false; gateMsg("",null); $("beginBtn").textContent="BEGIN ▸"; });
 });
-$("beginBtn").onclick = tryBegin;
-
-/* --- boot --- */
-function boot(){
-  $("gate").classList.add("hidden");
-  $("bootScreen").classList.remove("hidden");
-  $("barid").textContent = "BOOTING";
-  var lines=[
-    "> creating founder profile for "+S.founder.name+"…",
-    "> allocating starting gold: "+S.founder.gold+"  ["+S.founder.tier+" RUN]",
-    "> setting final-boss deadline: "+fmtDate(S.founder.deadline),
-    "> loading six levels… <span class='ok'>OK</span>",
-    "> arming the Oracle (it lies, catch it)… <span class='ok'>OK</span>",
-    "> mission ready. <span class='ok'>GO</span>"
-  ];
-  var el=$("boot"); el.innerHTML=""; var i=0;
-  (function tick(){ if(i<lines.length){ el.innerHTML+=lines[i]+"\n"; i++; setTimeout(tick,360); } else setTimeout(showMission,650); })();
-}
-
-function showMission(){
-  $("gate").classList.add("hidden");
-  $("bootScreen").classList.add("hidden");
-  $("mission").classList.remove("hidden");
-  $("barid").textContent="SESSION ACTIVE";
-  $("whoName").textContent=S.founder.name;
-  $("flavor").textContent="RUN MODE: "+(S.founder.tier||tierOf(parseMoney(S.founder.gold)))+". "+tierFlavor(S.founder.tier||tierOf(parseMoney(S.founder.gold)));
-  renderStats(); renderLevels();
-}
-
-function renderStats(){
-  var oracle=PHASES.filter(p=>(S.oracle[p.n]||[]).length>0).length;
-  var clearedN=PHASES.filter(p=>S.cleared[p.n]).length;
-  $("stats").innerHTML=
-    "<span class='stat'>GOLD <b>"+esc(S.founder.gold)+"</b></span>"+
-    "<span class='stat'>LAUNCH DAY <b>"+esc(fmtDate(S.founder.deadline))+"</b></span>"+
-    "<span class='stat'>HRS/WK <b>"+esc(S.founder.hours)+"</b></span>"+
-    "<span class='stat'>LEVELS <b>"+clearedN+"/6</b></span>"+
-    "<span class='stat'>ORACLE CAUGHT <b class='amber'>"+oracle+"/6</b></span>";
-  $("pfill").style.width=(clearedN/6*100)+"%";
-}
-
-function renderLevels(){
-  var box=$("levels"); box.innerHTML="";
-  PHASES.forEach(p=>{
-    var unlocked = p.n===1 || S.cleared[p.n-1];
-    var open = unlocked && !S.cleared[p.n] && !document.querySelector(".lvl.open");
-    var div=document.createElement("div");
-    div.className="lvl"+(unlocked?"":" locked")+(S.cleared[p.n]?" cleared":"");
-    div.dataset.n=p.n;
-    var checksHTML=p.checks.map((c,i)=>{ var on=S.checks[p.n][i];
-      return "<div class='ck"+(on?" on":"")+"' data-i='"+i+"'><span class='box'>"+(on?"✓":"")+"</span><span class='ctext'>"+esc(c)+"</span></div>"; }).join("");
-    var olog=(S.oracle[p.n]||[]).map(x=>"<li>"+esc(x)+"</li>").join("");
-    var promptText=p.prompt.replace(/\[GOLD\]/g, S.founder.gold);
-    var remaining=(S.checks[p.n]||[]).filter(x=>!x).length;
-    var clearReady=remaining===0;
-    div.innerHTML=
-      "<div class='head'>"+
-        "<div class='badge'>"+(S.cleared[p.n]?"✓":p.n)+"</div>"+
-        "<div class='htxt'><div class='t'>Level "+p.n+": "+esc(p.title)+"</div><div class='g'>"+esc(p.goal)+"</div></div>"+
-        (unlocked? "<span class='chev'>"+(open?"▲":"▼")+"</span>" : "<span class='lock-note'>🔒 clear Level "+(p.n-1)+"</span>")+
-      "</div>"+
-      "<div class='inner'>"+
-        "<div class='sec'>Checklist</div>"+checksHTML+
-        "<div class='sec'>A prompt to steal</div>"+
-        "<div class='prompt'><button class='copy'>copy</button><p>"+esc(promptText)+"</p></div>"+
-        "<div class='oracle'><h4>◆ SIDE-QUEST: CATCH THE ORACLE LYING</h4>"+
-          "<p>Find one thing the AI told you confidently that was wrong or off this level, and log it. One per level, minimum. The most important habit in the whole game.</p>"+
-          "<button class='obtn'>+ Log a lie you caught</button>"+(olog?"<ul class='olog'>"+olog+"</ul>":"")+
-        "</div>"+
-        "<div class='done'><b>Boss cleared when:</b> "+esc(p.done)+"</div>"+
-        "<button class='clear"+(S.cleared[p.n]||clearReady?"":" notready")+"'>"+
-          (S.cleared[p.n] ? "✓ LEVEL CLEARED"
-           : clearReady ? "CLEAR THIS LEVEL"
-           : "🔒 "+remaining+" OBJECTIVE"+(remaining===1?"":"S")+" LEFT")+"</button>"+
-      "</div>";
-    if(open) div.classList.add("open");
-    box.appendChild(div);
-  });
-  wireLevels();
-}
-
-function wireLevels(){
-  document.querySelectorAll(".lvl").forEach(div=>{
-    var n=+div.dataset.n;
-    var unlocked = n===1 || S.cleared[n-1];
-    div.querySelector(".head").onclick=()=>{ if(unlocked){ div.classList.toggle("open"); refreshChevrons(); } };
-    div.querySelectorAll(".ck").forEach(ck=>{
-      ck.onclick=()=>{ var i=+ck.dataset.i; S.checks[n][i]=!S.checks[n][i]; save(); renderLevels(); reopen(n); };
-    });
-    div.querySelector(".copy").onclick=(e)=>{
-      e.stopPropagation();
-      var txt=PHASES[n-1].prompt.replace(/\[GOLD\]/g, S.founder.gold);
-      if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>{ e.target.textContent="copied!"; setTimeout(()=>e.target.textContent="copy",1200); }).catch(()=>{}); }
-    };
-    div.querySelector(".obtn").onclick=()=>{
-      var v=prompt("What did the AI get confidently wrong? (one line)");
-      if(v && v.trim()){ S.oracle[n].push(v.trim()); save(); renderStats(); renderLevels(); reopen(n); }
-    };
-    div.querySelector(".clear").onclick=()=>{
-      if(!S.cleared[n]){
-        var remaining=(S.checks[n]||[]).filter(x=>!x).length;
-        if(remaining>0){ var b=div.querySelector(".clear"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); return; }
-      }
-      S.cleared[n]=!S.cleared[n]; save(); renderStats(); renderLevels();
-      if(S.cleared[n]) reopen(n+1<=6?n+1:n); else reopen(n);
-      if(PHASES.every(p=>S.cleared[p.n])){ if(!S.celebrated){ S.celebrated=true; save(); } celebrate(); }
-    };
-  });
-}
-function reopen(n){ var d=document.querySelector(".lvl[data-n='"+n+"']"); if(d){ var u=(n===1||S.cleared[n-1]); if(u) d.classList.add("open"); refreshChevrons(); } }
-function refreshChevrons(){ document.querySelectorAll(".lvl").forEach(d=>{ var c=d.querySelector(".chev"); if(c) c.textContent=d.classList.contains("open")?"▲":"▼"; }); }
-
-/* --- celebration --- */
-function celebrate(){
-  if(document.getElementById("celebrate")) return;
-  var oracle=PHASES.filter(p=>(S.oracle[p.n]||[]).length>0).length;
-  var ov=document.createElement("div"); ov.id="celebrate"; ov.className="cele";
-  ov.innerHTML="<div class='celecard'>"+
-    "<div class='cstamp'>YOU SHIPPED IT</div>"+
-    "<div class='csub'>"+esc(S.founder.name)+", you cleared all six levels and beat the final boss. You took a business from nothing to launched, and you caught the Oracle lying <b style='color:#ffb347'>"+oracle+" time"+(oracle===1?"":"s")+"</b> doing it. That second number is the one that follows you for the rest of your life.</div>"+
-    "<div class='cstat'>LEVELS 6/6 &nbsp;·&nbsp; ORACLE CAUGHT "+oracle+"/6</div>"+
-    "<button class='btn' id='celeClose' style='max-width:280px;margin:22px auto 0'>VICTORY LAP ▸</button>"+
-  "</div>";
-  document.body.appendChild(ov);
-  confetti();
-  document.getElementById("celeClose").onclick=()=>{ ov.remove(); document.querySelectorAll(".confetti").forEach(c=>c.remove()); };
-}
-function confetti(){
-  var colors=["#27f5a0","#ffb347","#e8f0ff"];
-  for(var i=0;i<90;i++){ var c=document.createElement("div"); c.className="confetti";
-    c.style.left=(Math.random()*100)+"vw"; c.style.background=colors[i%3];
-    c.style.animationDuration=(2.4+Math.random()*2.6)+"s"; c.style.animationDelay=(Math.random()*1.1)+"s";
-    document.body.appendChild(c); }
-  setTimeout(()=>document.querySelectorAll(".confetti").forEach(c=>c.remove()), 7500);
-}
-
-/* --- backup save/load (survives a cookie wipe or a new machine) --- */
-function exportSave(){
-  var blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
-  var u=URL.createObjectURL(blob); var a=document.createElement("a");
-  a.href=u; a.download=((S.founder&&S.founder.name)?S.founder.name.replace(/\s+/g,"-"):"founder")+"-quest-save.json";
-  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1000);
-}
-function importSave(file){
-  var r=new FileReader();
-  r.onload=function(){ try{ var d=JSON.parse(r.result);
-    if(d && d.founder && d.checks){ S=d; save(); showMission(); }
-    else alert("That doesn't look like a Founder Quest save file."); }
-    catch(e){ alert("Could not read that save file."); } };
-  r.readAsText(file);
-}
-$("saveBtn").onclick=exportSave;
-$("loadBtn").onclick=()=>$("loadFile").click();
-$("loadFile").onchange=function(){ if(this.files[0]) importSave(this.files[0]); this.value=""; };
-$("resetBtn").onclick=()=>{ if(confirm("Reset everything and start a new character? This wipes your saved progress on this device. (Tip: hit 'save backup' first if you might want it back.)")){ localStorage.removeItem(KEY); location.reload(); } };
-
-/* resume */
-if(S && S.founder){ showMission(); }
+document.getElementById("catchBtn").addEventListener("click", ()=>{ state.catches++; save(); render(); });
+document.getElementById("resetBtn").addEventListener("click", ()=>{ if(confirm("Reset all your progress and catches?")){ state={done:{},catches:0,open:-1}; save(); render(); } });
+render();
 </script>
 </body>
 </html>
