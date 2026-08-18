@@ -121,7 +121,7 @@
     <p class="gr-fallback">Rather just email us? <a href="mailto:info@aiactuallyfoundation.org">info@aiactuallyfoundation.org</a></p>
 
     <div class="gr-ok" id="grOk">
-      Thanks! Your email app should have opened with your request ready to send, just hit send and it comes straight to us. If nothing opened, email <b>info@aiactuallyfoundation.org</b> and we'll take it from there.
+      Thanks, your request came straight to us. We read every one, and we'll get back to you at the email you gave. If you don't hear anything in a few days, email <b>info@aiactuallyfoundation.org</b> and we'll take it from there.
     </div>
   </form>
 
@@ -145,27 +145,40 @@
 
 <script>
 (function(){
+  var ENDPOINT = "https://buildactually-groups-form.da-77b.workers.dev";
   var form = document.getElementById("grForm");
   var ok = document.getElementById("grOk");
+  var btn = form.querySelector(".gr-submit");
   form.addEventListener("submit", function(e){
     e.preventDefault();
     var name = document.getElementById("name").value.trim();
     var email = document.getElementById("email").value.trim();
     if(!name || !email){ alert("Please add your name and email so we can reach you."); return; }
-    var kind = document.getElementById("kind").value;
-    var size = document.getElementById("size").value.trim();
-    var notes = document.getElementById("notes").value.trim();
-    var subject = "Custom coach kit request, " + kind;
-    var body =
-      "Name: " + name + "\n" +
-      "Email: " + email + "\n" +
-      "Group: " + kind + "\n" +
-      "Roughly how many: " + (size || "(not sure yet)") + "\n\n" +
-      "Anything else:\n" + (notes || "(nothing added)") + "\n";
-    var href = "mailto:info@aiactuallyfoundation.org?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-    window.location.href = href;
-    ok.classList.add("show");
-    ok.scrollIntoView({behavior:"smooth", block:"center"});
+    var payload = {
+      name: name,
+      email: email,
+      kind: document.getElementById("kind").value,
+      size: document.getElementById("size").value.trim(),
+      notes: document.getElementById("notes").value.trim()
+    };
+    var original = btn.textContent;
+    btn.disabled = true; btn.textContent = "Sending...";
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    }).then(function(r){ return r.json().catch(function(){ return {}; }); })
+      .then(function(d){
+        if(!d || !d.ok) throw new Error("send failed");
+        form.reset();
+        btn.textContent = "Sent ✓";
+        ok.classList.add("show");
+        ok.scrollIntoView({behavior:"smooth", block:"center"});
+      })
+      .catch(function(){
+        btn.disabled = false; btn.textContent = original;
+        alert("Sorry, something went wrong sending that. Please email info@aiactuallyfoundation.org directly and we'll take care of it.");
+      });
   });
 })();
 </script>
