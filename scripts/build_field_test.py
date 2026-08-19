@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a gated field-test page for claudeactually.ai.
+"""Build a gated field-test page for buildactually.org.
 
 Takes a self-contained FIELD-TEST.html, wraps it in the terminal lock screen
 (scripts/gate_template.html), and emits a phase page. The visitor sees only

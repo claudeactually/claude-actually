@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Voice check: fail if any em dash reaches the site.
 
-The Claude, Actually voice rules (persona/voice.md, brand/BRAND-GUIDE.md) ban
+The Build, Actually voice rules (persona/voice.md, brand/BRAND-GUIDE.md) ban
 em dashes in anything published. This scans every HTML and Markdown file in
 the repo for a literal em dash or its entities and exits nonzero if found.
 Gated field-test payloads are base64, so this only sees rendered page copy.

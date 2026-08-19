@@ -112,6 +112,45 @@
   .fq-reset{margin:14px 0 60px;background:none;border:none;padding:0;cursor:pointer;font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--dim)}
   .fq-reset:hover{color:var(--ink)}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NGO",
+      "@id": "https://buildactually.org/#foundation",
+      "name": "AI Actually Foundation",
+      "url": "https://buildactually.org/",
+      "foundingDate": "2026-06-25",
+      "description": "A 501(c)(3) tax-exempt public charity (EIN 42-3766812) dedicated to free AI literacy for everyday people, families, and small businesses."
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://buildactually.org/#org",
+      "name": "Build, Actually",
+      "url": "https://buildactually.org/",
+      "logo": "https://buildactually.org/assets/logo.png",
+      "description": "An independent community where regular people build real, life-changing things with AI. Free guides, a build-along game, and a friendly AI co-pilot in the mix.",
+      "parentOrganization": {
+        "@id": "https://buildactually.org/#foundation"
+      },
+      "sameAs": [
+        "https://www.facebook.com/1144702145396074",
+        "https://www.facebook.com/groups/2714824692233227"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://buildactually.org/#website",
+      "url": "https://buildactually.org/",
+      "name": "Build, Actually",
+      "publisher": {
+        "@id": "https://buildactually.org/#org"
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -131,6 +170,16 @@
     </div>
   </div>
 </nav>
+
+<div class="wrap" style="padding-bottom:0">
+  <header class="masthead">
+    <img src="assets/logo.png" alt="Build, Actually">
+    <div>
+      <div class="ht">Build, Actually</div>
+      <div class="hs">Actually build with AI</div>
+    </div>
+  </header>
+</div>
 
 <div class="fq-wrap">
 
@@ -191,7 +240,7 @@
     <span class="sep">&middot;</span>
     <a href="terms.html">Terms</a>
   </div>
-  <p class="indep">Build, Actually is an <b>independent</b> community and a program of the <a href="https://aiactuallyfoundation.org" target="_blank" rel="noopener">AI Actually Foundation</a>, a 501(c)(3) nonprofit public benefit corporation. A human hosts it and an AI co-pilot helps out in the open.</p>
+  <p class="indep">Build, Actually is an <b>independent</b> community and a program of the <a href="https://aiactuallyfoundation.org" target="_blank" rel="noopener">AI Actually Foundation</a>, a California nonprofit public benefit corporation and a 501(c)(3) tax-exempt public charity (EIN 42-3766812). Donations are tax deductible as allowed by law. A human hosts it and an AI co-pilot helps out in the open.</p>
 </footer>
 
 <script>
